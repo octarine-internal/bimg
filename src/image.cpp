@@ -6,7 +6,9 @@
 #include "bimg_p.h"
 #include <bx/hash.h>
 
+#ifdef ASTC_SUPPORT
 #include <astc-codec/astc-codec.h>
+#endif
 
 #include <bx/debug.h>
 
@@ -4770,6 +4772,7 @@ namespace bimg
 			}
 			break;
 
+#ifdef ASTC_SUPPORT
 		case TextureFormat::ASTC4x4:
 		case TextureFormat::ASTC5x5:
 		case TextureFormat::ASTC6x6:
@@ -4779,6 +4782,7 @@ namespace bimg
 			imageDecodeToRgba8(_allocator, _dst, _src, _width, _height, _dstPitch, _srcFormat);
 			imageSwizzleBgra8(_dst, _dstPitch, _width, _height, _dst, _dstPitch);
 			break;
+#endif
 
 		case TextureFormat::RGBA8:
 			{
@@ -4828,6 +4832,7 @@ namespace bimg
 			}
 			break;
 
+#ifdef ASTC_SUPPORT
 		case TextureFormat::ASTC4x4:
 		case TextureFormat::ASTC5x5:
 		case TextureFormat::ASTC6x6:
@@ -4861,6 +4866,7 @@ namespace bimg
 				imageCheckerboard(_dst, _width, _height, 16, UINT32_C(0xff000000), UINT32_C(0xff00ff00) );
 			}
 			break;
+#endif
 
 		default:
 			{

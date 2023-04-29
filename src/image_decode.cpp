@@ -15,12 +15,14 @@ BX_PRAGMA_DIAGNOSTIC_IGNORED_CLANG("-Wdeprecated-declarations")
 BX_PRAGMA_DIAGNOSTIC_IGNORED_MSVC(4018) // warning C4018:  '<': signed/unsigned mismatch
 BX_PRAGMA_DIAGNOSTIC_IGNORED_MSVC(4100) // error C4100: '' : unreferenced formal parameter
 BX_PRAGMA_DIAGNOSTIC_IGNORED_MSVC(4389) // warning C4389 : '==' : signed / unsigned mismatch
+#ifdef TINYEXR_SUPPORT
 BX_PRAGMA_DIAGNOSTIC_IGNORED_MSVC(4505) // warning C4505: 'tinyexr::miniz::def_realloc_func': unreferenced local function has been removed
 #define MINIZ_NO_ARCHIVE_APIS
 #define MINIZ_NO_STDIO
 #define TINYEXR_IMPLEMENTATION
 #include <tinyexr/tinyexr.h>
 BX_PRAGMA_DIAGNOSTIC_POP()
+#endif
 
 BX_PRAGMA_DIAGNOSTIC_PUSH();
 BX_PRAGMA_DIAGNOSTIC_IGNORED_MSVC(4127) // warning C4127: conditional expression is constant
@@ -430,6 +432,7 @@ namespace bimg
 		return output;
 	}
 
+#ifdef TINYEXR_SUPPORT
 	static ImageContainer* imageParseTinyExr(bx::AllocatorI* _allocator, const void* _data, uint32_t _size, bx::Error* _err)
 	{
 		BX_ERROR_SCOPE(_err);
@@ -638,6 +641,7 @@ namespace bimg
 
 		return output;
 	}
+#endif
 
 	static ImageContainer* imageParseStbImage(bx::AllocatorI* _allocator, const void* _data, uint32_t _size, bx::Error* _err)
 	{
@@ -840,7 +844,9 @@ namespace bimg
 		input = NULL == input ? imageParsePvr3    (_allocator, _data, _size, _err) : input;
 		input = NULL == input ? imageParseGnf     (_allocator, _data, _size, _err) : input;
 		input = NULL == input ? imageParseLodePng (_allocator, _data, _size, _err) : input;
+#ifdef TINYEXR_SUPPORT
 		input = NULL == input ? imageParseTinyExr (_allocator, _data, _size, _err) : input;
+#endif
 		input = NULL == input ? imageParseJpeg    (_allocator, _data, _size, _err) : input;
 		input = NULL == input ? imageParseStbImage(_allocator, _data, _size, _err) : input;
 
